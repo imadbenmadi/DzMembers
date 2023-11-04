@@ -30,7 +30,7 @@ export default function Sign_up() {
                 "Your account has been created Successfully",
                 "success"
             );
-            Navigate("/Login");
+            Navigate("/Auth/Login");
         } else if (response.status === 500) {
             Swal.fire(
                 "Error!",
@@ -172,7 +172,7 @@ export default function Sign_up() {
                 )}
             </Formik>
             <div style={{ fontSize: "13px", marginTop: "10px" }}>
-                Don't Have an account ?<Link to="/Login">Create One</Link>
+               Alredy Have an account ?<Link to="/Auth/Login">Create One</Link>
             </div>
         </div>
     );

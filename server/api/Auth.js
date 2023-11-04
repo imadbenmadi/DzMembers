@@ -5,7 +5,7 @@ const { Users } = require("../models/Db");
 
 router.post("/Sign_up", async (req, res) => {
     const { FirstName, LastName, UserName, Email, Password } = req.body;
-    if (!FirstName || !LastName || !UserName ||!Email ||!Password ) {
+    if (!FirstName || !LastName || !UserName || !Email || !Password) {
         return res.status(409).json({ message: "Missing Data" });
     }
     const existingUser = await Users.findOne({ UserName: UserName });
@@ -36,11 +36,10 @@ router.post("/Login", async (req, res, next) => {
         return res.status(409).json({ message: "Missing Data" });
     }
     const user = await Users.findOne({ UserName: UserName });
-
     if (user && user.Password === Password) {
         req.session.userId = user._id;
         res.sendStatus(200);
-        console.log("Login Succesfully");
+        console.log(req.session);
     } else {
         res.sendStatus(409);
         console.log("Username or Password isn't correct");

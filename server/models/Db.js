@@ -15,10 +15,10 @@ const Users = mongoose.model(
 const Messages = mongoose.model(
     "Messages",
     new mongoose.Schema({
-        _Creatore: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },
+        Creatore: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },
         title: { type: String, required: true },
         text: { type: String, required: true },
-        CreatedDate: { type: Date, required: true },
+        CreatedDate: { type: String, required: true },
     })
 );
 module.exports = { Messages, Users };

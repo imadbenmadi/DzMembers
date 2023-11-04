@@ -126,7 +126,7 @@ export default function Login() {
                 )}
             </Formik>
             <div style={{ fontSize: "13px", marginTop: "10px" }}>
-                Don't Have an account ?<Link to="/Sign_up">Create One</Link>
+                Don't Have an account ?<Link to="/Auth/Sign_up">Create One</Link>
             </div>
         </div>
     );

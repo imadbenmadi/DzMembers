@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
+const authMidlleware = require("../authMiddleware");
 const { Users } = require("../../models/Db");
 
-router.post("/", async (req, res, next) => {
+router.post("/",authMidlleware, async (req, res, next) => {
+    console.log(req.session)
     try {
         const user = await Users.findOne({ _id: req.session.userId });
         if (user) {

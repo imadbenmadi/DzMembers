@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import AddMessage from "./addMessage";
-
-export default function HomeLeftBar({ UserName, IsAdmin, IsMember }) {
+export default function HomeLeftBar({ UserName, IsAdmin, IsMember}) {
     const [divHeight, setDivHeight] = useState(0);
     useEffect(() => {
         const calculateHeight = () => {
             const viewportHeight = window.innerHeight;
-            const newHeight = viewportHeight -65 ; // Adjust the height as needed
+            const newHeight = viewportHeight - 65; // Adjust the height as needed
             setDivHeight(newHeight);
         };
         calculateHeight();
@@ -35,6 +34,7 @@ export default function HomeLeftBar({ UserName, IsAdmin, IsMember }) {
                 )}
             </div>
             <AddMessage />
+            
         </div>
     );
 }

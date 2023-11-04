@@ -56,8 +56,9 @@ app.use(
 // });
 
 // Include your authentication routes
-app.use("/AddMessage", require("./api/Messages/AddMessage"));
 app.use("/Auth", require("./api/Auth"));
+
+app.use("/AddMessage", require("./api/Messages/AddMessage"));
 app.use("/Logout", require("./api/logout"));
 app.use("/homePage", require("./api/homaPage"));
 app.use("/changeToAdmin", require("./api/ChangeStatus/ChangeToAdmin"));
@@ -68,6 +69,7 @@ app.use("/GetMessages", require("./api/Messages/GetMessages"));
 app.post("/test", (req, res, next) => {
     res.sendStatus(200);
 });
+app.use("/GetUsers",require("./api/GetUsers"))
 app.listen(3000);
 
 module.exports = app;
