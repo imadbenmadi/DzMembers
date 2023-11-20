@@ -1,10 +1,23 @@
 const express = require("express");
 const router = express.Router();
-
+const multer = require("multer");
+const path = require("path");
 const { Users } = require("../models/Db");
+// Set up storage for multer
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'public/images'); // Save the uploaded files to the 'public/images' folder
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+    }
+});
 
+const upload = multer({ storage: storage });
 router.post("/Sign_up", async (req, res) => {
     const { FirstName, LastName, UserName, Email, Password } = req.body;
+    const profilePicPath = req.file ? req.file.path : null;
     if (!FirstName || !LastName || !UserName || !Email || !Password) {
         return res.status(409).json({ message: "Missing Data" });
     }
@@ -19,6 +32,7 @@ router.post("/Sign_up", async (req, res) => {
             UserName: UserName,
             Email: Email,
             Password: Password,
+            ProfilePic: profilePicPath,
         });
         try {
             await newUser.save();

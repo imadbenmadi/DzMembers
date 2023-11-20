@@ -7,43 +7,62 @@ import Axios from "axios";
 export default function Sign_up() {
     const Navigate = useNavigate();
     async function handleRegestration(values, { setSubmitting }) {
-        const response = await Axios.post(
-            "http://localhost:3000/Auth/Sign_up",
-            values,
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                validateStatus: () => true,
-            }
-        );
+        const formData = new FormData();
+        formData.append("FirstName", values.FirstName);
+        formData.append("LastName", values.LastName);
+        formData.append("UserName", values.UserName);
+        formData.append("Email", values.Email);
+        formData.append("Password", values.Password);
+        formData.append("ProfilePic", values.ProfilePic); // Append the profile picture
 
-        if (response.status === 400) {
-            Swal.fire(
-                "Username already exists",
-                "Please try to use another Username",
-                "error"
+        try {
+            const response = await Axios.post(
+                "http://localhost:3000/Auth/Sign_up",
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data", // Set content type to form-data
+                    },
+                    validateStatus: () => true,
+                }
             );
-        } else if (response.status === 200) {
-            Swal.fire(
-                "Done!",
-                "Your account has been created Successfully",
-                "success"
-            );
-            Navigate("/Auth/Login");
-        } else if (response.status === 500) {
-            Swal.fire(
-                "Error!",
-                "Internal server error. Please try again",
-                "error"
-            );
-        } else {
+
+            if (response.status === 400) {
+                Swal.fire(
+                    "Username already exists",
+                    "Please try to use another Username",
+                    "error"
+                );
+            } else if (response.status === 200) {
+                Swal.fire(
+                    "Done!",
+                    "Your account has been created Successfully",
+                    "success"
+                );
+                Navigate("/Auth/Login");
+            } else if (response.status === 500) {
+                Swal.fire(
+                    "Error!",
+                    "Internal server error. Please try again",
+                    "error"
+                );
+            } else {
+                Swal.fire(
+                    "Error!",
+                    "Something Went Wrong. Please try again",
+                    "error"
+                );
+            }
+        } catch (error) {
+            console.error("Error uploading profile picture:", error);
+
             Swal.fire(
                 "Error!",
                 "Something Went Wrong. Please try again",
                 "error"
             );
         }
+
         setSubmitting(false);
     }
 
@@ -57,6 +76,7 @@ export default function Sign_up() {
                     UserName: "",
                     Email: "",
                     Password: "",
+                    ProfilePic: null,
                 }}
                 validate={(values) => {
                     const errors = {};
@@ -157,6 +177,28 @@ export default function Sign_up() {
                                 style={errorInputMessage}
                             />
                         </div>
+                        <div>
+                            <label htmlFor="profilePic">Profile Picture:</label>
+                            <Field
+                                type="file"
+                                id="profilePic"
+                                name="ProfilePic"
+                                accept="image/*"
+                                onChange={(event) =>
+                                    setFieldValue(
+                                        "ProfilePic",
+                                        event.currentTarget.files[0]
+                                    )
+                                }
+                                style={inputStyle}
+                                disabled={isSubmitting}
+                            />
+                            <ErrorMessage
+                                name="ProfilePic"
+                                component="div"
+                                style={errorInputMessage}
+                            />
+                        </div>
                         <button
                             type="submit"
                             disabled={isSubmitting}
@@ -172,7 +214,7 @@ export default function Sign_up() {
                 )}
             </Formik>
             <div style={{ fontSize: "13px", marginTop: "10px" }}>
-               Alredy Have an account ?<Link to="/Auth/Login">Create One</Link>
+                Alredy Have an account ?<Link to="/Auth/Login">Create One</Link>
             </div>
         </div>
     );

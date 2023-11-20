@@ -10,6 +10,7 @@ const Users = mongoose.model(
         Email: { type: String, required: true },
         Membership: { type: Boolean, default: false },
         isAdmin: { type: Boolean, default: false },
+        ProfilePic: { type: String },
     })
 );
 const Messages = mongoose.model(
