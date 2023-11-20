@@ -66,7 +66,7 @@ app.use("/changeToMember", require("./api/ChangeStatus/ChangeToMember"));
 app.use("/RemoveAdmin", require("./api/ChangeStatus/RemoveAdmin"));
 app.use("/RemoveMember", require("./api/ChangeStatus/RemoveMember"));
 app.use("/GetMessages", require("./api/Messages/GetMessages"));
-app.post("/test", (req, res, next) => {
+app.get("/test", (req, res, next) => {
     res.sendStatus(200);
 });
 app.use("/GetUsers",require("./api/GetUsers"))

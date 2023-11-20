@@ -6,7 +6,7 @@ const { Users } = require("../models/Db");
 // Set up storage for multer
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'public/images'); // Save the uploaded files to the 'public/images' folder
+        cb(null, '../images'); // Save the uploaded files to the 'public/images' folder
     },
     filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -23,7 +23,7 @@ router.post("/Sign_up", async (req, res) => {
     }
     const existingUser = await Users.findOne({ UserName: UserName });
     if (existingUser) {
-        res.sendStatus(400);
+        res.status(400);
         // .json({ error: "Username already exists" });
     } else {
         const newUser = new Users({

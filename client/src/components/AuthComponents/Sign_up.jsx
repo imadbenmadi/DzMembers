@@ -16,16 +16,11 @@ export default function Sign_up() {
         formData.append("ProfilePic", values.ProfilePic); // Append the profile picture
 
         try {
-            const response = await Axios.post(
-                "http://localhost:3000/Auth/Sign_up",
-                formData,
-                {
-                    headers: {
-                        "Content-Type": "multipart/form-data", // Set content type to form-data
-                    },
-                    validateStatus: () => true,
-                }
-            );
+            const response = await fetch("http://localhost:3000/Auth/Sign_up", {
+                method: "POST",
+                body: formData,
+                credentials: "include",
+            });
 
             if (response.status === 400) {
                 Swal.fire(
