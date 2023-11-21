@@ -5,7 +5,6 @@ const path = require("path");
 const { Users } = require("../models/Db");
 const fs = require("fs");
 
-// Set up storage for multer
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         const uploadPath = path.join(__dirname, "../images");
@@ -18,13 +17,16 @@ const storage = multer.diskStorage({
     },
     filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-        cb(
-            null,
+        const fileName =
             file.fieldname +
-                "-" +
-                uniqueSuffix +
-                path.extname(file.originalname)
-        );
+            "-" +
+            uniqueSuffix +
+            path.extname(file.originalname);
+
+        // Store only the filename in the database, not the entire path
+        req.uploadedFileName = fileName;
+
+        cb(null, fileName);
     },
 });
 
@@ -35,7 +37,7 @@ router.post("/Sign_up", upload.single("ProfilePic"), async (req, res) => {
     if (!FirstName || !LastName || !UserName || !Email || !Password) {
         return res.status(409).json({ message: "Missing Data" });
     }
-        const profilePicPath = req.file ? req.file.path : null;
+    const profilePicPath = req.uploadedFileName; 
 
     const existingUser = await Users.findOne({ UserName: UserName });
 

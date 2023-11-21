@@ -28,9 +28,7 @@ const Home = () => {
                     setIsMember(response.data.isMember);
                     setIsAdmin(response.data.isAdmin);
                     setUserName(response.data.UserName);
-
-                    // Fetch user's profile picture
-                    await getProfilePic();
+                    setUserProfilePic(response.data.ProfilePic);
                 } else if (response.status === 401) {
                     setAuth(false);
                 }
@@ -43,22 +41,7 @@ const Home = () => {
         checkAuthentication();
     }, []);
 
-    const getProfilePic = async () => {
-        try {
-            const profilePicResponse = await Axios.get(
-                "http://localhost:3000/getUserProfilePic",
-                {
-                    withCredentials: true,
-                }
-            );
-
-            if (profilePicResponse.status === 200 && profilePicResponse.data) {
-                setUserProfilePic(profilePicResponse.data.profilePic);
-            }
-        } catch (error) {
-            console.error("Error getting user profile picture:", error);
-        }
-    };
+    
 
     if (auth === null) {
         return <HomeLoading />;

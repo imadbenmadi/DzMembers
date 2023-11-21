@@ -155,11 +155,11 @@ export default function HomeNav({
                 Members
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                {/* <img
+                <img
                     style={{ width: "35px" }}
-                    src={`http://localhost:3000/getUserProfilePic/${userProfilePic}`}
+                    src={`http://localhost:3000/images/${userProfilePic}`}
                     alt=""
-                /> */}
+                />
                 <div
                     style={{
                         color: "red",

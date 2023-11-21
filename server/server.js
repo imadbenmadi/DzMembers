@@ -68,7 +68,6 @@ app.use("/changeToMember", require("./api/ChangeStatus/ChangeToMember"));
 app.use("/RemoveAdmin", require("./api/ChangeStatus/RemoveAdmin"));
 app.use("/RemoveMember", require("./api/ChangeStatus/RemoveMember"));
 app.use("/GetMessages", require("./api/Messages/GetMessages"));
-app.use("/getUserProfilePic",require("./api/GetPic"));
 app.get("/test", (req, res, next) => {
     res.sendStatus(200);
 });
