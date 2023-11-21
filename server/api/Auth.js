@@ -3,28 +3,44 @@ const router = express.Router();
 const multer = require("multer");
 const path = require("path");
 const { Users } = require("../models/Db");
+const fs = require("fs");
+
 // Set up storage for multer
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, '../images'); // Save the uploaded files to the 'public/images' folder
+        const uploadPath = path.join(__dirname, "../images");
+        fs.mkdir(uploadPath, { recursive: true }, (err) => {
+            if (err) {
+                return cb(err);
+            }
+            cb(null, uploadPath);
+        });
     },
     filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-    }
+        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+        cb(
+            null,
+            file.fieldname +
+                "-" +
+                uniqueSuffix +
+                path.extname(file.originalname)
+        );
+    },
 });
 
 const upload = multer({ storage: storage });
-router.post("/Sign_up", async (req, res) => {
+router.post("/Sign_up", upload.single("ProfilePic"), async (req, res) => {
     const { FirstName, LastName, UserName, Email, Password } = req.body;
-    const profilePicPath = req.file ? req.file.path : null;
+
     if (!FirstName || !LastName || !UserName || !Email || !Password) {
         return res.status(409).json({ message: "Missing Data" });
     }
+        const profilePicPath = req.file ? req.file.path : null;
+
     const existingUser = await Users.findOne({ UserName: UserName });
+
     if (existingUser) {
-        res.status(400);
-        // .json({ error: "Username already exists" });
+        return res.status(400).json({ error: "Username already exists" });
     } else {
         const newUser = new Users({
             FirstName: FirstName,
@@ -34,12 +50,15 @@ router.post("/Sign_up", async (req, res) => {
             Password: Password,
             ProfilePic: profilePicPath,
         });
+
         try {
             await newUser.save();
             res.sendStatus(200);
-            // .json({ message: "Account Created Successfully" });
         } catch (err) {
-            res.sendStatus(400);
+            res.status(400).json({
+                error: "Error creating user",
+                details: err.message,
+            });
         }
     }
 });

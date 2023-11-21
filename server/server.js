@@ -4,6 +4,7 @@ const cors = require("cors");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const MongoDBStore = require("connect-mongodb-session")(session);
+const path = require("path")
 const { Messages, Users } = require("./models/Db");
 
 const app = express();
@@ -16,6 +17,7 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use("/images", express.static(path.join(__dirname, "images")));
 
 mongoose.set("strictQuery", false);
 const mongoDB = "mongodb://127.0.0.1:27017/Members_Only";
@@ -66,6 +68,7 @@ app.use("/changeToMember", require("./api/ChangeStatus/ChangeToMember"));
 app.use("/RemoveAdmin", require("./api/ChangeStatus/RemoveAdmin"));
 app.use("/RemoveMember", require("./api/ChangeStatus/RemoveMember"));
 app.use("/GetMessages", require("./api/Messages/GetMessages"));
+app.use("/getUserProfilePic",require("./api/GetPic"));
 app.get("/test", (req, res, next) => {
     res.sendStatus(200);
 });

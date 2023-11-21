@@ -4,23 +4,34 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Axios from "axios";
+
 export default function Sign_up() {
     const Navigate = useNavigate();
-    async function handleRegestration(values, { setSubmitting }) {
+
+    async function handleRegistration(
+        
+        values,
+        { setSubmitting, setFieldValue }
+    ) {
         const formData = new FormData();
         formData.append("FirstName", values.FirstName);
         formData.append("LastName", values.LastName);
         formData.append("UserName", values.UserName);
         formData.append("Email", values.Email);
         formData.append("Password", values.Password);
-        formData.append("ProfilePic", values.ProfilePic); // Append the profile picture
-
+        formData.append("ProfilePic", values.ProfilePic);
         try {
-            const response = await fetch("http://localhost:3000/Auth/Sign_up", {
-                method: "POST",
-                body: formData,
-                credentials: "include",
-            });
+            let response = await Axios.post(
+                "http://localhost:3000/Auth/Sign_up",
+                values,
+                {
+                    withCredentials: true,
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                    validateStatus: () => true,
+                }
+            );
 
             if (response.status === 400) {
                 Swal.fire(
@@ -41,6 +52,8 @@ export default function Sign_up() {
                     "Internal server error. Please try again",
                     "error"
                 );
+            } else if (response.status === 409) {
+                Swal.fire("Error!", "Missing Data", "error");
             } else {
                 Swal.fire(
                     "Error!",
@@ -49,8 +62,7 @@ export default function Sign_up() {
                 );
             }
         } catch (error) {
-            console.error("Error uploading profile picture:", error);
-
+            console.error("Error during registration:", error);
             Swal.fire(
                 "Error!",
                 "Something Went Wrong. Please try again",
@@ -98,9 +110,9 @@ export default function Sign_up() {
                     }
                     return errors;
                 }}
-                onSubmit={handleRegestration}
+                onSubmit={handleRegistration}
             >
-                {({ isSubmitting }) => (
+                {({ isSubmitting, setFieldValue }) => (
                     <Form style={formStyle}>
                         <div>
                             <Field
@@ -187,7 +199,9 @@ export default function Sign_up() {
                                 }
                                 style={inputStyle}
                                 disabled={isSubmitting}
+                                value={undefined} // Try adding this line
                             />
+
                             <ErrorMessage
                                 name="ProfilePic"
                                 component="div"
@@ -209,7 +223,7 @@ export default function Sign_up() {
                 )}
             </Formik>
             <div style={{ fontSize: "13px", marginTop: "10px" }}>
-                Alredy Have an account ?<Link to="/Auth/Login">Create One</Link>
+                Already have an account? <Link to="/Auth/Login">Log in</Link>
             </div>
         </div>
     );
@@ -237,6 +251,7 @@ const buttonStyle = {
     borderRadius: "4px",
     cursor: "pointer",
 };
+
 const errorInputMessage = {
     fontSize: "12px",
     color: "red",

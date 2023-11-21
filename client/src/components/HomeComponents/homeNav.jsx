@@ -7,6 +7,7 @@ export default function HomeNav({
     IsAdmin,
     setIsMember,
     setIsAdmin,
+    userProfilePic,
 }) {
     const Navigate = useNavigate();
 
@@ -146,7 +147,7 @@ export default function HomeNav({
                 backgroundColor: "#9affa787",
                 position: "fixed",
                 width: "100%",
-                height:"65px"
+                height: "65px",
             }}
         >
             <div style={{ fontSize: "23px", fontWeight: "bold" }}>
@@ -154,11 +155,11 @@ export default function HomeNav({
                 Members
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                <img
+                {/* <img
                     style={{ width: "35px" }}
-                    src=" ../public/user.png"
+                    src={`http://localhost:3000/getUserProfilePic/${userProfilePic}`}
                     alt=""
-                />
+                /> */}
                 <div
                     style={{
                         color: "red",

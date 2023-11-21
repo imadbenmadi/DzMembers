@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
-import HomeNav from "./HomeComponents/homeNav";
-import { useNavigate, Outlet } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Axios from "axios";
+import HomeNav from "./HomeComponents/homeNav";
 import HomeLoading from "./HomeComponents/HomeLoading";
 import HomeContent from "./HomeComponents/homeContent";
-export default function Home() {
-    const Navigate = useNavigate();
-    const [IsMember, setIsMember] = useState(false);
-    const [IsAdmin, setIsAdmin] = useState(false);
-    const [UserName, SetUserName] = useState("");
-    const [Auth, setAuth] = useState(null); // Use null to indicate loading initially
+
+const Home = () => {
+    const navigate = useNavigate();
+    const [auth, setAuth] = useState(null);
+    const [isMember, setIsMember] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [userName, setUserName] = useState("");
+    const [userProfilePic, setUserProfilePic] = useState(null);
 
     useEffect(() => {
-        async function testAuth() {
+        const checkAuthentication = async () => {
             try {
                 const response = await Axios.get(
                     "http://localhost:3000/homePage",
@@ -25,7 +27,10 @@ export default function Home() {
                     setAuth(true);
                     setIsMember(response.data.isMember);
                     setIsAdmin(response.data.isAdmin);
-                    SetUserName(response.data.UserName);
+                    setUserName(response.data.UserName);
+
+                    // Fetch user's profile picture
+                    await getProfilePic();
                 } else if (response.status === 401) {
                     setAuth(false);
                 }
@@ -33,33 +38,53 @@ export default function Home() {
                 console.error("Error while checking authentication:", error);
                 setAuth(false);
             }
-        }
+        };
 
-        testAuth();
+        checkAuthentication();
     }, []);
 
-    if (Auth === null) {
+    const getProfilePic = async () => {
+        try {
+            const profilePicResponse = await Axios.get(
+                "http://localhost:3000/getUserProfilePic",
+                {
+                    withCredentials: true,
+                }
+            );
+
+            if (profilePicResponse.status === 200 && profilePicResponse.data) {
+                setUserProfilePic(profilePicResponse.data.profilePic);
+            }
+        } catch (error) {
+            console.error("Error getting user profile picture:", error);
+        }
+    };
+
+    if (auth === null) {
         return <HomeLoading />;
     }
 
-    if (Auth === true) {
+    if (auth) {
         return (
             <>
                 <HomeNav
-                    IsMember={IsMember}
-                    IsAdmin={IsAdmin}
+                    isMember={isMember}
+                    isAdmin={isAdmin}
                     setIsMember={setIsMember}
                     setIsAdmin={setIsAdmin}
+                    userProfilePic={userProfilePic}
                 />
                 <HomeContent
-                    UserName={UserName}
-                    IsMember={IsMember}
-                    IsAdmin={IsAdmin}
+                    userName={userName}
+                    isMember={isMember}
+                    isAdmin={isAdmin}
                 />
             </>
         );
     }
 
-    Navigate("/Auth/login");
+    navigate("/Auth/login");
     return null;
-}
+};
+
+export default Home;

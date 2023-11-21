@@ -13,7 +13,8 @@ router.get("/", authMidlleware, async (req, res, next) => {
             UserName: user.UserName,
             isMember: user.Membership,
             isAdmin: user.isAdmin,
-            UserName: user.UserName
+            UserName: user.UserName,
+            ProfilePic: user.ProfilePic,
         });
     } catch (error) {
         next(error);
