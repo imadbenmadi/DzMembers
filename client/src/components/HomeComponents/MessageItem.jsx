@@ -8,13 +8,20 @@ export default function MessageItem({
     Date,
     title,
     text,
+    Profile_Pic,
 }) {
     return (
         <div className="flex border w-[90%] m-auto min-h-[50px] mt-4 mb-4 rounded-md">
             <div className="bg-gray-200 flex-[25%] p-2">
                 <div>
                     <img
-                        src="../../../public/user.png"
+                        src={`http://localhost:3000/images/${Profile_Pic}`}
+                        style={{
+                            width: "35px",
+                            height: "35px",
+                            borderRadius: "50%",
+                            objectFit: "cover",
+                        }}
                         alt=""
                         className=" w-10 "
                     />

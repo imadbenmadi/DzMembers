@@ -156,7 +156,7 @@ export default function HomeNav({
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                 <img
-                    style={{ width: "35px" }}
+                    style={{ width: "35px",height: "35px",borderRadius:"50%",objectFit:"cover" }}
                     src={`http://localhost:3000/images/${userProfilePic}`}
                     alt=""
                 />

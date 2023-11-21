@@ -11,7 +11,7 @@ function HomeMessages() {
             method: "GET",
             credentials: "include",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "multipart/form-data",
             },
         });
         if (response.ok) {
@@ -46,6 +46,7 @@ function HomeMessages() {
                             Date={message.CreatedDate}
                             title={message.title}
                             text={message.text}
+                            Profile_Pic={message.Creatore.ProfilePic}
                         />
                     ))}
                 </div>
