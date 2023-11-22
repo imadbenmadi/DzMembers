@@ -16,7 +16,7 @@ function HomeMessages() {
         });
         if (response.ok) {
             const data = await response.json();
-            setMessages(data);
+            setMessages(data.reverse());
             setLoaded(true)
         } else {
             console.error("Failed to fetch messages.");
@@ -30,7 +30,7 @@ function HomeMessages() {
         <div className="pl-[291px]">
             {Loaded ? (
                 <div>
-                    {messages.map((message) => (
+                    {messages.reverse().map((message) => (
                         <MessageItem
                             key={message._id}
                             FirstName={message.Creatore.FirstName}
