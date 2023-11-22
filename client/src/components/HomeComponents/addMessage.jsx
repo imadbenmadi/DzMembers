@@ -66,7 +66,7 @@ export default function AddMessage() {
                     onSubmit={handleSubmit}
                 >
                     {({ isSubmitting }) => (
-                        <Form>
+                        <Form style={{display:changed?"none":"block"}}>
                             <div className="mb-4">
                                 <label
                                     htmlFor="title"
