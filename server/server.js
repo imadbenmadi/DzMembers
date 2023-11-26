@@ -5,8 +5,7 @@ const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const path = require("path")
-const { Messages, Users } = require("./models/Db");
-
+const env = require("dotenv").config()
 const app = express();
 app.use(
     cors({
@@ -20,7 +19,8 @@ app.use(cookieParser());
 app.use("/images", express.static(path.join(__dirname, "images")));
 
 mongoose.set("strictQuery", false);
-const mongoDB = "mongodb://127.0.0.1:27017/Members_Only";
+// const mongoDB = "mongodb://127.0.0.1:27017/Members_Only";
+const mongoDB = process.env.MONGO_URL;
 async function connect_to_db() {
     await mongoose.connect(mongoDB, {
         useNewUrlParser: true,
